@@ -30,6 +30,7 @@
             }
           } else {
             voice.pause();
+
             voiceButton.textContent = "▶ Reprendre le message";
             voiceButton.setAttribute("aria-pressed", "false");
 
@@ -151,6 +152,54 @@
       } else {
         animateDailyValue();
       }
+    }
+
+    // ENTRÉE PREMIUM APRÈS CHOIX MUSIQUE / SANS MUSIQUE
+    const gateway = document.getElementById("horizonGateway");
+    const gatewayEnter = document.getElementById("horizonGatewayEnter");
+    const musicChoice = document.getElementById("welcomeSoundOn");
+    const silentChoice = document.getElementById("welcomeSoundOff");
+
+    let gatewayTimer = null;
+
+    const hideGateway = () => {
+      if (!gateway) return;
+
+      gateway.classList.remove("is-visible");
+      gateway.setAttribute("aria-hidden", "true");
+
+      if (gatewayTimer) {
+        clearTimeout(gatewayTimer);
+      }
+    };
+
+    const showGateway = () => {
+      if (!gateway) return;
+
+      if (gatewayTimer) {
+        clearTimeout(gatewayTimer);
+      }
+
+      setTimeout(() => {
+        gateway.classList.add("is-visible");
+        gateway.setAttribute("aria-hidden", "false");
+
+        gatewayTimer = setTimeout(() => {
+          hideGateway();
+        }, 3600);
+      }, 120);
+    };
+
+    if (musicChoice) {
+      musicChoice.addEventListener("click", showGateway);
+    }
+
+    if (silentChoice) {
+      silentChoice.addEventListener("click", showGateway);
+    }
+
+    if (gatewayEnter) {
+      gatewayEnter.addEventListener("click", hideGateway);
     }
   }
 
